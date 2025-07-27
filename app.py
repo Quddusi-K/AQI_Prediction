@@ -57,12 +57,42 @@ if page == "Home":
 
     # Plot forecast
     st.subheader(f"📈 AQI Forecast (Next 72 Hours) - {city_select}")
-    fig, ax = plt.subplots()
-    ax.plot(city_df["time"], city_df["predicted_us_aqi"], color="purple", marker="o")
-    ax.set_ylabel("Predicted AQI")
-    ax.set_xlabel("Time")
-    ax.set_title(f"Predicted AQI Trend - {city_select}")
-    ax.grid(True)
+    fig, ax = plt.subplots(figsize=(10, 5))
+    # Use a color gradient for the line based on AQI value
+    from matplotlib.collections import LineCollection
+    import matplotlib.colors as mcolors
+    import matplotlib as mpl
+    x = city_df["time"].values
+    y = city_df["predicted_us_aqi"].values
+    # Convert time to numbers for line segments
+    x_num = mpl.dates.date2num(city_df["time"])
+    points = np.array([x_num, y]).T.reshape(-1, 1, 2)
+    segments = np.concatenate([points[:-1], points[1:]], axis=1)
+    norm = mcolors.Normalize(vmin=min(y), vmax=max(y))
+    lc = LineCollection(segments, cmap="plasma", norm=norm)
+    lc.set_array(y)
+    lc.set_linewidth(3)
+    line = ax.add_collection(lc)
+    # Scatter points with color
+    scatter = ax.scatter(city_df["time"], y, c=y, cmap="plasma", s=80, edgecolor="white", zorder=3)
+    # Colorbar for AQI
+    cbar = fig.colorbar(line, ax=ax, orientation="vertical", pad=0.02)
+    cbar.set_label("Predicted AQI", fontsize=12)
+    # X-axis formatting
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %d\n%H:%M"))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=6))
+    fig.autofmt_xdate(rotation=45)
+    # Labels and title
+    ax.set_ylabel("Predicted AQI", fontsize=13)
+    ax.set_xlabel("Time", fontsize=13)
+    ax.set_title(f"Predicted AQI Trend - {city_select}", fontsize=16, color="#333333", pad=15)
+    # Grid and background
+    ax.grid(axis="y", linestyle="--", alpha=0.7)
+    ax.set_facecolor("#f7f7fa")
+    fig.patch.set_facecolor("#f7f7fa")
+    # Remove top/right spines
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
     st.pyplot(fig)
 
     # Show table
@@ -81,7 +111,7 @@ if page == "Home":
     display_df = display_df[cols_to_show_first + other_cols]
 
     # Apply color gradient to predicted AQI
-    styled_df = display_df.style.format(precision=1).applymap(
+    styled_df = display_df.style.format(precision=1).map(
         highlight_aqi, subset=["predicted_us_aqi"]
     )
 
@@ -93,17 +123,6 @@ if page == "Home":
     st.subheader("📋 Prediction Table (Enhanced)")
     st.dataframe(styled_df, use_container_width=True, height=600, width=1200)
 
-
-
-
-    # SHAP Explanation
-    # st.subheader(f"🧠 Feature Importance (SHAP Summary Plot) - {city_select}")
-    # import os
-    # shap_img_path = f"data/shap_summary_{city_select.lower()}.png"
-    # if os.path.exists(shap_img_path):
-    #     st.image(shap_img_path, caption=f"Feature impact on AQI prediction for {city_select}", use_container_width=True)
-    # else:
-    #     st.info("SHAP plot not available yet. Please run the prediction script first.")
 
 
 elif page == "Forecast, SHAP & EDA Tabs":
