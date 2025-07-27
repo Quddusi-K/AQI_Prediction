@@ -2,9 +2,8 @@ pandas
 scikit-learn
 joblib
 requests
-
 matplotlib
 streamlit
-openmeteo-requests
-requests-cache
-retry-requests
+openmeteo_requests
+requests_cache
+retry_requests

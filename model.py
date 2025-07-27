@@ -40,7 +40,7 @@ from sklearn.metrics import mean_absolute_error, root_mean_squared_error, r2_sco
 import matplotlib.pyplot as plt
 
 # Load feature data
-df = pd.read_csv("data/historical_combined.csv", parse_dates=["time"])
+df = pd.read_csv("data/historical_combined_cities.csv", parse_dates=["time"])
 df.set_index("time", inplace=True)
 
 # Split chronologically
