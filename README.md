@@ -1,147 +1,173 @@
-# AQI Multi-City Forecasting & Analysis Dashboard
 
-A robust, interactive dashboard for 72-hour Air Quality Index (AQI) forecasting, model explainability, and exploratory data analysis (EDA) for Karachi, Islamabad, and Lahore. The project features automated data fetching, multi-model predictions, SHAP explainability, and a modern Streamlit UI with downloadable visualizations.
+# 🌫️ AQI Multi-City Forecasting & Analysis Dashboard
 
----
-
-## Features
-
-- **Multi-City Support:** Forecasts and analysis for Karachi, Islamabad, and Lahore.
-- **Automated Data Pipeline:**
-  - Fetches and appends latest air quality and weather data from Open-Meteo APIs.
-  - Handles time overlap and prioritizes recent data.
-  - CI/CD workflows for daily data and forecast updates.
-- **Model Predictions:**
-  - Uses Ridge Regression and other models (Random Forest, Gradient Boosting, Linear Regression) for AQI prediction.
-  - Saves all features and predictions for transparency.
-- **Model Explainability:**
-  - SHAP analysis for each city, with downloadable summary plots.
-- **Interactive Streamlit Dashboard:**
-  - City selection, three main tabs: Forecast, SHAP, EDA.
-  - Modern, vibrant plots (matplotlib, seaborn, plotly).
-  - Download buttons for all graphs and images.
-  - Enhanced prediction table with AQI level highlighting.
-- **EDA Tools:**
-  - Correlation heatmap, feature distributions, time-series trends.
+An interactive and automated platform for **72-hour Air Quality Index (AQI) forecasting**, **model explainability**, and **exploratory data analysis (EDA)** for major cities in Pakistan — **Karachi, Islamabad, and Lahore**. The system is powered by CI/CD workflows, machine learning models, and a visually intuitive **Streamlit UI**.
 
 ---
 
-## Directory Structure
+## 🚀 Features
+
+* 🔄 **Multi-City Forecasting:** Real-time AQI prediction for Karachi, Islamabad, and Lahore.
+* ⚙️ **Automated Data Pipeline:**
+
+  * Hourly/daily data fetched via **Open-Meteo APIs**.
+  * Automatic deduplication and time-based merge for air quality and weather features.
+  * Integrated with **GitHub Actions** for continuous updates.
+* 📈 **Modeling:**
+
+  * Trained multiple ML models: **Ridge Regression** (best-performing), Random Forest, Gradient Boosting, Linear Regression.
+  * Auto-saves predictions and inputs for transparency and future analysis.
+* 🧠 **Model Explainability:**
+
+  * SHAP visualizations for feature impact per city.
+  * Downloadable summary plots.
+* 💻 **Interactive Streamlit Dashboard:**
+
+  * Tabbed interface: **Forecast**, **SHAP**, and **EDA**.
+  * Modern visualizations with **Plotly**, **Seaborn**, and **Matplotlib**.
+  * Enhanced AQI table with emoji-based air quality bands.
+  * Download buttons for all visual content.
+* 📊 **Exploratory Data Analysis (EDA):**
+
+  * Correlation heatmaps, histograms, time-series trends.
+  * User-selectable feature views.
+
+---
+
+## 🗂️ Project Structure
 
 ```
 .
-├── app.py                        # Streamlit dashboard
-├── backfill_data.py              # Automated data fetching & merging
-├── predict.py                    # Model prediction & SHAP analysis
-├── model.py                      # Model training (various regressors)
-├── requirements.txt              # Python dependencies
+├── app.py                        # Streamlit app UI
+├── backfill_data.py             # Fetches and merges historical data
+├── predict.py                   # Forecasting script + SHAP visualization
+├── model.py                     # ML training and evaluation
+├── requirements.txt             # Python dependencies
 ├── data/
-│   ├── predicted_aqi_72hr.csv    # Latest 72-hour forecast
-│   ├── shap_summary_karachi.png  # SHAP plots (per city)
-│   └── ...
+│   ├── predicted_aqi_72hr.csv   # Latest predictions
+│   ├── historical_combined.csv  # Fetched features
+│   └── shap_summary_*.png       # SHAP plots per city
 ├── model/
-│   ├── RidgeRegression.joblib    # Trained models
-│   └── ...
-├── .github/
-│   └── workflows/
-│       ├── hourly_features.yml   # CI/CD for data update
-│       └── update_forecast.yml   # CI/CD for forecast update
-└── ...
+│   └── RidgeRegression.joblib   # Trained best model
+└── .github/
+    └── workflows/
+        ├── hourly_features.yml  # Updates raw/merged features
+        ├── update_forecast.yml  # Updates next 72-hour prediction
+        └── daily_train.yml      # (Optional) Retraining workflow
 ```
 
 ---
 
-## Quickstart
+## ⚡ Quickstart
 
-1. **Clone the repository:**
-   ```sh
-   git clone <repo-url>
-   cd AQI_Prediction
-   ```
+### 1. Clone the Repo
 
-2. **Install dependencies:**
-   ```sh
-   pip install -r requirements.txt
-   ```
-   For Plotly image downloads, also install:
-   ```sh
-   pip install -U kaleido
-   ```
+```bash
+git clone https://github.com/Quddusi-K/AQI_Prediction.git
+cd AQI_Prediction
+```
 
-3. **Run the dashboard:**
-   ```sh
-   streamlit run app.py
-   ```
+### 2. Install Dependencies
 
-4. **Automated Data & Forecast Updates:**
-   - Data and forecast are updated daily via GitHub Actions (see `.github/workflows/`).
-   - To run manually:
-     ```sh
-     python backfill_data.py
-     python predict.py
-     ```
+```bash
+pip install -r requirements.txt
+# For Plotly image downloads:
+pip install -U kaleido
+```
 
----
+### 3. Launch the Streamlit App
 
-## Usage
+```bash
+streamlit run app.py
+```
 
-- **City Selection:** Use the dropdown to select Karachi, Islamabad, or Lahore.
-- **Tabs:**
-  - **Forecast:** View 72-hour AQI forecast plot and enhanced prediction table. Download the plot as PNG.
-  - **SHAP:** View and download SHAP summary plot for model explainability.
-  - **EDA:** Explore correlation heatmap, feature distributions, and time-series trends. All plots are downloadable.
+### 4. Manual Scripts (Optional)
+
+```bash
+python backfill_data.py     # Fetch and merge historical data
+python predict.py           # Generate forecast + SHAP plots
+```
 
 ---
 
-## Data Sources
-- [Open-Meteo Air Quality API](https://open-meteo.com/)
-- [Open-Meteo Weather API](https://open-meteo.com/)
+## 🖥️ Dashboard Usage
+
+### 🏙️ City Selection
+
+Use the dropdown to toggle between cities (Karachi, Islamabad, Lahore).
+
+### 📂 Tabs Overview
+
+* **Forecast:**
+
+  * 72-hour AQI line plot (color gradient).
+  * Enhanced prediction table with AQI categories.
+* **SHAP:**
+
+  * Model interpretability using SHAP summary plot.
+* **EDA:**
+
+  * View correlations, feature distributions, and time-based feature trends.
 
 ---
 
-## Key Python Dependencies
-- streamlit
-- pandas
-- numpy
-- matplotlib
-- seaborn
-- plotly
-- scikit-learn
-- joblib
-- requests
-- openmeteo_requests
-- requests_cache
-- retry_requests
-- shap
-- kaleido (for Plotly image export)
+## 🔗 Data Source APIs
+
+* 🌫️ [Open-Meteo Air Quality API](https://open-meteo.com/)
+* 🌦️ [Open-Meteo Weather API](https://open-meteo.com/)
 
 ---
 
-## CI/CD
-- Automated workflows for daily data and forecast updates using GitHub Actions.
-- See `.github/workflows/hourly_features.yml` and `.github/workflows/update_forecast.yml`.
+## 🧪 Core Dependencies
+
+| Package         | Purpose                  |
+| --------------- | ------------------------ |
+| `streamlit`     | UI framework             |
+| `scikit-learn`  | ML training & prediction |
+| `shap`          | Model explainability     |
+| `matplotlib`    | Static visualizations    |
+| `plotly`        | Interactive charts       |
+| `seaborn`       | EDA visualizations       |
+| `openmeteo_sdk` | API wrapper              |
+| `joblib`        | Model saving/loading     |
+| `requests`      | API access               |
+| `kaleido`       | Exporting Plotly to PNG  |
 
 ---
 
-## Screenshots
+## 🔁 CI/CD Workflows
 
-> Add screenshots of the dashboard here for a visual overview.
+* **Hourly Feature Update:**
+  `.github/workflows/hourly_features.yml`
 
----
+* **Daily Forecast Update:**
+  `.github/workflows/update_forecast.yml`
 
-## License
+* **Model Retraining (Optional):**
+  `.github/workflows/daily_train.yml`
 
-MIT License. See `LICENSE` file for details.
-
----
-
-## Acknowledgements
-- Open-Meteo for free air quality and weather data APIs.
-- SHAP for model explainability tools.
-- Streamlit, matplotlib, seaborn, and plotly for visualization.
+Workflows automatically fetch data, update predictions, and commit changes to the repository.
 
 ---
 
-## Contact
+## 📸 Screenshots
 
-For questions or contributions, please open an issue or pull request on GitHub.
+![Dashboard Screenshot](data/screenshot.png)
+
+---
+
+## 🤝 Contributing
+
+Contributions and feedback are welcome!
+
+* Open an [issue](https://github.com/Quddusi-K/AQI_Prediction/issues)
+* Or submit a pull request for improvements.
+
+---
+
+## 📬 Contact
+
+Built with ❤️ by [M. Quddusi Kashaf](https://github.com/Quddusi-K).
+
+For questions, please create a GitHub issue or contact via repository discussions.
+
