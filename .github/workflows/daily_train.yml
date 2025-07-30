@@ -2,7 +2,7 @@ name: Daily Model Retraining
 
 on:
   schedule:
-    - cron: '0 1 * * *'     # Every day at 01:00 UTC
+    - cron: '5 0 * * *'     # Every day at 00:05 UTC
   workflow_dispatch:
 
 jobs:

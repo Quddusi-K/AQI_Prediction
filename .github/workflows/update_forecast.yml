@@ -25,10 +25,12 @@ jobs:
         run: |
           python predict.py
 
-      - name: 💾 Commit Updated Forecast
+      - name: 💾 Commit All Updates (CSV + SHAP Images)
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add data/predicted_aqi_72hr.csv
-          git commit -m "🔄 Updated AQI forecast for next 72 hours [CI]"
+          git add data/*.csv
+          git add data/shap_summary_*.png
+          git commit -m "🔄 Auto-updated data and SHAP images [CI]" || echo "No changes to commit"
           git push
+
