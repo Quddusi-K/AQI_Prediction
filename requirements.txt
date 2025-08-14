@@ -12,3 +12,5 @@ numpy
 seaborn
 plotly
 shap
+xgboost
+kaleido
